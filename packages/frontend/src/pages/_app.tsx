@@ -6,7 +6,6 @@ import {AppProps} from 'next/app';
 import {useEffect} from 'react';
 import Head from 'next/head';
 import {Nav} from '../components/layout/Nav';
-import {RetirementNotice} from '../components/layout/RetirementNotice';
 
 function MyApp({Component, pageProps}: AppProps) {
   useEffect(() => {
@@ -30,7 +29,6 @@ function MyApp({Component, pageProps}: AppProps) {
         <Nav/>
         <main className="main">
           <div className="container">
-            <RetirementNotice/>
             <Component {...pageProps} />
           </div>
         </main>
