@@ -1,11 +1,11 @@
 import { DataSource } from "typeorm"
 
 export const AppDataSource = new DataSource({
-  type: "mysql",
-  host: process.env.MYSQL_HOST,
-  username: process.env.MYSQL_USER,
-  database:  process.env.MYSQL_DB,
-  password:  process.env.MYSQL_PASSWORD,
+  type: "postgres",
+  host: process.env.PGHOST,
+  username: process.env.PGUSER,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
   synchronize: false,
   logging: false,
   entities: [__dirname + "/../models/*.ts"],

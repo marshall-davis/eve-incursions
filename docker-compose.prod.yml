@@ -40,26 +40,23 @@ services:
       caddy: eve-incursions.de
       caddy.reverse_proxy: /ws {{upstreams 4003}}
 
-  mysql:
+  postgres:
     restart: unless-stopped
 
-  mysql_backup:
-    image: databack/mysql-backup
+  pg_backup:
+    image: schickling/postgres-backup-s3
     restart: always
-    volumes:
-      - ../backups:/db
     networks:
       - internal
     environment:
-      - DB_DUMP_TARGET=s3://eve-incursions-mysql-backups/backups
-      - DB_USER=${MYSQL_USER}
-      - DB_PASS=${MYSQL_PASSWORD}
-      - DB_DUMP_FREQ=1440
-      - DB_DUMP_BEGIN=0
-      - DB_SERVER=${MYSQL_HOST}
-      - DB_NAMES=${MYSQL_DB}
-      - DB_DUMP_KEEP_PERMISSIONS=false
-      - AWS_ENDPOINT_URL=https://storage.googleapis.com
+      - POSTGRES_HOST=${PGHOST}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_DATABASE=${PGDATABASE}
+      - S3_BUCKET=eve-incursions-pg-backups
+      - S3_PREFIX=backups
+      - S3_ENDPOINT=https://storage.googleapis.com
+      - SCHEDULE=@daily
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
 

@@ -9,7 +9,7 @@ import {RatResolver} from './resolvers/RatResolver';
 import {AppDataSource} from './lib/data-source';
 
 async function main() {
-  await waitPort({host: process.env.MYSQL_HOST, port: 3306});
+  await waitPort({host: process.env.PGHOST, port: 5432});
   await AppDataSource.initialize();
   const schema = await buildSchema({
     resolvers: [SpawnResolver, CommunityResolver, SpawnLogResolver, RatResolver]

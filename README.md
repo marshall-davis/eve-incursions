@@ -20,7 +20,7 @@ A npm-workspaces monorepo with three services, wired together with Docker Compos
 | `packages/ws`     | WebSocket server (push live updates)    | `4003`      |
 | `packages/frontend` | Next.js site (SSR)                    | `4002`      |
 
-Backing services: **MariaDB** (`3313` on host) and **Redis** (internal). In production a
+Backing services: **PostgreSQL** (`5433` on host) and **Redis** (internal). In production a
 [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) container routes
 everything under one host; locally you can hit the services directly or run caddy too.
 
@@ -34,19 +34,19 @@ everything under one host; locally you can hit the services directly or run cadd
 Create a `.env` in the repo root (it is gitignored):
 
 ```env
-MYSQL_HOST=mysql
-MYSQL_USER=root
-MYSQL_PASSWORD=your-db-password
-MYSQL_DB=eve-incursions
+PGHOST=postgres
+PGUSER=postgres
+PGPASSWORD=your-db-password
+PGDATABASE=eve-incursions
 
 # GCS HMAC credentials for the database-backup container (production only).
-# Used by the `mysql_backup` service via Google's S3-compatible API. Omit for local dev.
+# Used by the `pg_backup` service via Google's S3-compatible API. Omit for local dev.
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
 
-`MYSQL_HOST` is the compose service name (`mysql`) when running in Docker. The `AWS_*`
-keys are the HMAC credentials the `mysql_backup` service (see `docker-compose.prod.yml`)
+`PGHOST` is the compose service name (`postgres`) when running in Docker. The `AWS_*`
+keys are the HMAC credentials the `pg_backup` service (see `docker-compose.prod.yml`)
 uses to push dumps to a Google Cloud Storage bucket through its S3-compatible endpoint —
 they are not needed for local development.
 
@@ -77,16 +77,20 @@ Then open:
 
 ### Seed the data
 
-A fresh MariaDB starts empty, so the homepage will have nothing to show until it is
-populated. `seed/eve-incursions-seed.sql.gz` is a gzipped MariaDB dump of all 11 tables
+A fresh PostgreSQL instance starts empty, so the homepage will have nothing to show until
+it is populated. `seed/eve-incursions-seed.sql.gz` is a gzipped SQL dump of all 11 tables
 (systems, spawns, communities, rat stats, etc.), taken on 2026-06-26. It contains only
-public EVE/game data — no user data. Pipe it into the running `mysql` container:
+public EVE/game data — no user data. Pipe it into the running `postgres` container:
 
 ```bash
 gunzip -c seed/eve-incursions-seed.sql.gz | \
-  docker compose -f docker-compose.yml -f docker-compose.dev.yml exec -T mysql \
-  mariadb -uroot -p"$MYSQL_PASSWORD" eve-incursions
+  docker compose -f docker-compose.yml -f docker-compose.dev.yml exec -T postgres \
+  psql -U "$PGUSER" "$PGDATABASE"
 ```
+
+> **Note:** the seed file was originally generated from MariaDB. If you hit syntax errors,
+> you may need to convert it first (e.g. with `pgloader` or by re-exporting from a running
+> MariaDB instance using `pg_dump`).
 
 ## Useful commands
 
@@ -119,4 +123,4 @@ staging) define the deployed stack, routed by the external caddy proxy in `caddy
 
 ## Tech stack
 
-Next.js · React · TypeScript · GraphQL · MariaDB · Redis · Docker · Chart.js
+Next.js · React · TypeScript · GraphQL · PostgreSQL · Redis · Docker · Chart.js
