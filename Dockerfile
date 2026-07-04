@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy workspace manifests
 COPY package.json package-lock.json ./
 COPY packages/server/package.json ./packages/server/
-COPY packages/websocket/package.json ./packages/websocket/
+COPY packages/ws/package.json ./packages/websocket/
 COPY packages/frontend/package.json ./packages/frontend/
 
 # Install all dependencies (dev deps required at runtime for ts-node/tsx)
