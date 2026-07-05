@@ -39,7 +39,7 @@ export class Spawn extends BaseEntity {
   @Column({type: "float"})
   influence: number;
 
-  @Column()
+  @Column({name: 'constellationID'})
   constellationId: number;
 
   @CreateDateColumn({name: 'created_at'})
