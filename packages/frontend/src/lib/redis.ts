@@ -5,4 +5,5 @@ export const redis = new Redis({
     connectTimeout: 5000,
     commandTimeout: 5000,
     lazyConnect: true,
+    tls: {},
 });
