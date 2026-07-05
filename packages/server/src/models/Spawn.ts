@@ -1,4 +1,4 @@
-import {BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, JoinColumn} from 'typeorm';
 import {Field, Float, ID, ObjectType} from 'type-graphql';
 import {Constellation} from './Constellation';
 import {System} from './System';
@@ -53,6 +53,7 @@ export class Spawn extends BaseEntity {
 
   @Field(() => Constellation)
   @ManyToOne(() => Constellation, c => c.spawns, {lazy: true})
+  @JoinColumn({name: 'constellationID'})
   constellation: Promise<Constellation>;
 
   @Field(() => [InfluenceLogEntry])
