@@ -4,7 +4,10 @@ import {Rat} from '../components/rats/Rat';
 import styles from '../components/rats/rats.module.css';
 
 export const getServerSideProps = async () => {
-  const client = new GraphQLClient('http://server:4001');
+  const graphqlUri = process.env.GRAPHQL_URI && process.env.GRAPHQL_PORT
+    ? `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`
+    : process.env.GRAPHQL_URI || 'http://server:4001';
+  const client = new GraphQLClient(graphqlUri);
   const sdk = getSdk(client);
   const {ratGroups} = await sdk.ratGroups();
 

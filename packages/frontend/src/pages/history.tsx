@@ -5,7 +5,10 @@ import {GetServerSideProps} from 'next';
 import {dotlanTransform} from '../lib/utils';
 
 export const getServerSideProps: GetServerSideProps = async ({query: {page = 1}}) => {
-  const client = new GraphQLClient('http://server:4001');
+  const graphqlUri = process.env.GRAPHQL_URI && process.env.GRAPHQL_PORT
+    ? `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`
+    : process.env.GRAPHQL_URI || 'http://server:4001';
+  const client = new GraphQLClient(graphqlUri);
   const sdk = getSdk(client);
   const {spawnLogs: {items, total}} = await sdk.spawnLogs({page: Number(page)});
 

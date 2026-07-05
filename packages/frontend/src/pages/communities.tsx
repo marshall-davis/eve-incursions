@@ -2,7 +2,10 @@ import {GraphQLClient} from 'graphql-request';
 import {ActiveCommunitiesQuery, getSdk} from '../lib/graphql';
 
 export const getServerSideProps = async () => {
-  const client = new GraphQLClient('http://server:4001');
+  const graphqlUri = process.env.GRAPHQL_URI && process.env.GRAPHQL_PORT
+    ? `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`
+    : process.env.GRAPHQL_URI || 'http://server:4001';
+  const client = new GraphQLClient(graphqlUri);
   const sdk = getSdk(client);
   const {activeCommunities} = await sdk.activeCommunities();
 
