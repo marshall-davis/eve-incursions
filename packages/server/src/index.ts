@@ -15,7 +15,7 @@ async function main() {
     resolvers: [SpawnResolver, CommunityResolver, SpawnLogResolver, RatResolver]
   })
   const server = new ApolloServer({ schema })
-  const { url } = await startStandaloneServer(server, { listen: { port: process.env.GRAPHQL_PORT || 4001 } });
+  const { url } = await startStandaloneServer(server, { listen: { host: '0.0.0.0', port: process.env.GRAPHQL_PORT || 4001 } });
   console.log(`Server has started at ${url}`)
 }
 
