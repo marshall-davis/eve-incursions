@@ -22,7 +22,7 @@ export class SpawnResolver {
       .createQueryBuilder('spawn')
       .leftJoin("spawn.constellation", "constellation")
       .leftJoin("constellation.systems", "system")
-      .where("ROUND(system.security, 1) >= 0.5")
+      .where("ROUND(CAST(system.security AS numeric), 1) >= 0.5")
       .andWhere("system.type = 'Staging'")
       .andWhere("spawn.active = 1")
       .getCount();
@@ -35,7 +35,7 @@ export class SpawnResolver {
         .select("spawn.endedAt")
         .leftJoin("spawn.constellation", "constellation")
         .leftJoin("constellation.systems", "system")
-        .where("ROUND(system.security, 1) >= 0.5")
+        .where("ROUND(CAST(system.security AS numeric), 1) >= 0.5")
         .andWhere("system.type = 'Staging'")
         .andWhere("spawn.active = 0")
         .orderBy("spawn.endedAt", "DESC")
