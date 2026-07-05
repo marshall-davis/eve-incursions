@@ -1,4 +1,4 @@
-import {BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn} from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {Constellation} from './Constellation';
 import {Station} from './Station';
@@ -18,6 +18,7 @@ export class System extends BaseEntity {
 
   @Field(() => Constellation)
   @ManyToOne(() => Constellation, c => c.systems, {lazy: true})
+  @JoinColumn({name: 'constellationID'})
   constellation: Promise<Constellation>;
 
   @Field(() => [Station])
