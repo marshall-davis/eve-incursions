@@ -36,7 +36,7 @@ export class System extends BaseEntity {
   sovereigntyHolderName: string;
 
   @Field(() => Boolean)
-  @Column()
+  @Column({type: 'int'})
   isIsland: boolean;
 
   @Field(() => Number)

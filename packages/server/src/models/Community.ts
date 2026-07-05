@@ -31,7 +31,7 @@ export class Community extends BaseEntity {
   tank: string;
 
   @Field()
-  @Column()
+  @Column({type: 'int'})
   active: boolean;
 
   @Field(() => String)
@@ -39,15 +39,15 @@ export class Community extends BaseEntity {
   timezone: string;
 
   @Field()
-  @Column({name: 'isHQ'})
+  @Column({name: 'isHQ', type: 'int'})
   hq: boolean;
 
   @Field()
-  @Column({name: 'isAS'})
+  @Column({name: 'isAS', type: 'int'})
   as: boolean;
 
   @Field()
-  @Column({name: 'isVG'})
+  @Column({name: 'isVG', type: 'int'})
   vg: boolean;
 
 }
