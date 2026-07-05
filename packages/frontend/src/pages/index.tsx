@@ -12,7 +12,10 @@ export const getServerSideProps = async () => {
   if (cache !== null && (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development')) {
     return {props: JSON.parse(cache)};
   } else {
-    const client = new GraphQLClient('http://server:4001');
+    const graphqlUri = process.env.GRAPHQL_URI && process.env.GRAPHQL_PORT
+      ? `${process.env.GRAPHQL_URI}:${process.env.GRAPHQL_PORT}`
+      : process.env.GRAPHQL_URI || 'http://server:4001';
+    const client = new GraphQLClient(graphqlUri);
     const sdk = getSdk(client);
     const {activeSpawns, lastHighSecSpawn} = await sdk.activeSpawns();
 

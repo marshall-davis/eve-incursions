@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws';
 import Redis from 'ioredis';
 
 const wss = new WebSocketServer({ port: 4003 });
-const redis = new Redis({host: 'redis'});
+const redis = new Redis({host: process.env.REDIS_HOST || 'redis'});
 
 redis.subscribe('spawn.change').then(() => {
   redis.on('message', async (channel) => {
