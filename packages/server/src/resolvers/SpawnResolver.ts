@@ -12,7 +12,7 @@ export class SpawnResolver {
 
   @Query(() => [Spawn])
   activeSpawns() {
-    return Spawn.find({where: {active: 1 as unknown as boolean}});
+    return Spawn.find({where: {active: 1}});
   }
 
   @Query(() => LastHsSpawn)

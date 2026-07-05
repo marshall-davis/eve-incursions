@@ -5,6 +5,6 @@ import {Community} from '../models/Community';
 export class CommunityResolver {
   @Query(() => [Community])
   activeCommunities() {
-    return Community.find({where: {active: 1 as unknown as boolean}, order: {name: 'ASC'}});
+    return Community.find({where: {active: 1}, order: {name: 'ASC'}});
   }
 }

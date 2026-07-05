@@ -84,12 +84,12 @@ export const updateSpawns = async (doInfluenceLogs = false) => {
     const updatedSpawns = [];
 
     for await (const spawn of spawns) {
-      let dbSpawn = await Spawn.findOne({where: {constellationId: spawn.constellation_id, active: true}});
+      let dbSpawn = await Spawn.findOne({where: {constellationId: spawn.constellation_id, active: 1}});
 
       if (!dbSpawn) {
         dbSpawn = new Spawn();
         dbSpawn.constellationId = spawn.constellation_id;
-        dbSpawn.active = true;
+        dbSpawn.active = 1;
         dbSpawn.type = 0;
         dbSpawn.establishedAt = new Date();
 
@@ -113,7 +113,7 @@ export const updateSpawns = async (doInfluenceLogs = false) => {
 
       const oldState = dbSpawn.state ?? '';
       dbSpawn.influence = spawn.influence;
-      dbSpawn.boss = spawn.has_boss;
+      dbSpawn.boss = spawn.has_boss ? 1 : 0;
       dbSpawn.state = capitalize(spawn.state);
 
       await manager.save(dbSpawn);
@@ -140,12 +140,12 @@ export const updateSpawns = async (doInfluenceLogs = false) => {
       }
     }
 
-    const endedSpawns = await Spawn.find({where: {active: true, id: Not(In(updatedSpawns))}});
+    const endedSpawns = await Spawn.find({where: {active: 1, id: Not(In(updatedSpawns))}});
 
     for (const endedSpawn of endedSpawns) {
       changed = true;
       endedSpawn.state = 'Ended';
-      endedSpawn.active = false;
+      endedSpawn.active = 0;
       endedSpawn.endedAt = new Date();
       await manager.save(endedSpawn);
 

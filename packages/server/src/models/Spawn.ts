@@ -21,11 +21,11 @@ export class Spawn extends BaseEntity {
 
   @Field(() => Boolean)
   @Column({type: 'int'})
-  active: boolean;
+  active: number;
 
   @Field(() => Boolean)
   @Column({name: 'hasBoss', type: 'int'})
-  boss: boolean;
+  boss: number;
 
   @Field(() => Date)
   @Column({name: 'established_at'})

@@ -32,7 +32,7 @@ export class Community extends BaseEntity {
 
   @Field()
   @Column({type: 'int'})
-  active: boolean;
+  active: number;
 
   @Field(() => String)
   @Column()
@@ -40,14 +40,14 @@ export class Community extends BaseEntity {
 
   @Field()
   @Column({name: 'isHQ', type: 'int'})
-  hq: boolean;
+  hq: number;
 
   @Field()
   @Column({name: 'isAS', type: 'int'})
-  as: boolean;
+  as: number;
 
   @Field()
   @Column({name: 'isVG', type: 'int'})
-  vg: boolean;
+  vg: number;
 
 }
