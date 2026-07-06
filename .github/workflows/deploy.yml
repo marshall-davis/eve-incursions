@@ -1,4 +1,4 @@
-name: Build and Push
+name: Build and Push Image
 
 on:
   push:
@@ -43,3 +43,35 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout infrastructure repo
+        uses: actions/checkout@v4
+        with:
+          repository: marshall-davis/infrastructure
+          path: infrastructure
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::635943190281:role/exposure-github-actions
+          aws-region: us-east-1
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region us-east-1 --name exposure-eks
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Deploy
+        run: |
+          helm upgrade eve-incursions infrastructure/helm/tenants/eve-incursions \
+            --namespace eve-incursions \
+            --set image.tag=sha-${{ github.sha }}
