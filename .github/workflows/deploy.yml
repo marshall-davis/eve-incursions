@@ -77,4 +77,4 @@ jobs:
         run: |
           helm upgrade eve-incursions infrastructure/helm/tenants/eve-incursions \
             --namespace eve-incursions \
-            --set image.tag=sha-${{ github.sha }}
+            --set image.tag=sha-$(echo ${{ github.sha }} | cut -c1-7)
